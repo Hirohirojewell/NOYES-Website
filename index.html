@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do You Love Me?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background particle effect */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('particles.jpeg') repeat;
+            opacity: 0.15;
+            animation: particleMovement 20s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes particleMovement {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        #question, #yesGif, #noGif, #moreLoveGif {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #question {
+            display: block;
+            opacity: 1;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        img {
+            width: 200px;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        button {
+            margin: 10px;
+            padding: 12px 24px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .gif-container img {
+            border: 4px solid #ff4d88;
+            border-radius: 15px;
+            animation: pulseBorder 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseBorder {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 77, 136, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 77, 136, 0.8); }
+        }
+
+        .back-button {
+            background-color: #555;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #333;
+        }
+
+        .more-love-button {
+            background-color: #FF69B4;
+        }
+
+        .more-love-button:hover {
+            background-color: #FF1493;
+        }
+
+        .love-message {
+            font-size: 1.5em;
+            color: #FF1493;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="question">
+        <h1>Do you love me?</h1>
+        <img src="question.gif" alt="Question GIF">
+        <div>
+            <button onclick="showGif('yes')">Yes</button>
+            <button onclick="showGif('no')">No</button>
+        </div>
+    </div>
+
+    <div id="yesGif" class="gif-container">
+        <img src="love.gif" alt="Love GIF">
+        <button class="back-button" onclick="goBack()">← Back to Question</button>
+        <button class="more-love-button" onclick="showMoreLove()">Love me more</button>
+    </div>
+
+    <div id="noGif" class="gif-container">
+        <img src="sad.gif" alt="Sad GIF">
+        <button class="back-button" onclick="goBack()">← Back to Question</button>
+    </div>
+
+    <div id="moreLoveGif" class="gif-container">
+        <img src="heart.gif" alt="Heart GIF">
+        <p class="love-message">Then let me hardfck you jk KISS :* 💖</p>
+        <button class="back-button" onclick="goBack()">← Back to Question</button>
+    </div>
+
+    <!-- Audio files for click and feedback sounds -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+    <audio id="yesSound" src="cheerful.mp3" preload="auto"></audio>
+    <audio id="noSound" src="sad.mp3" preload="auto"></audio>
+
+    <script>
+        function playSound(soundId) {
+            document.getElementById(soundId).play();
+        }
+
+        function showGif(answer) {
+            // Play click sound
+            playSound("clickSound");
+
+            // Hide question with fade-out effect
+            document.getElementById("question").style.opacity = "0";
+
+            setTimeout(() => {
+                document.getElementById("question").style.display = "none";
+
+                // Show the appropriate GIF and play sound based on the answer
+                if (answer === 'yes') {
+                    document.getElementById("yesGif").style.display = "block";
+                    document.getElementById("yesGif").style.opacity = "1";
+                    playSound("yesSound");
+                } else if (answer === 'no') {
+                    document.getElementById("noGif").style.display = "block";
+                    document.getElementById("noGif").style.opacity = "1";
+                    playSound("noSound");
+                }
+            }, 500); // Wait for fade-out to complete
+        }
+
+        function showMoreLove() {
+            // Hide the previous "Yes" GIF and show the new "Love me more" GIF and message
+            document.getElementById("yesGif").style.opacity = "0";
+
+            setTimeout(() => {
+                document.getElementById("yesGif").style.display = "none";
+                document.getElementById("moreLoveGif").style.display = "block";
+                document.getElementById("moreLoveGif").style.opacity = "1";
+            }, 500);
+        }
+
+        function goBack() {
+            // Fade out the displayed GIF
+            document.getElementById("yesGif").style.opacity = "0";
+            document.getElementById("noGif").style.opacity = "0";
+            document.getElementById("moreLoveGif").style.opacity = "0";
+
+            setTimeout(() => {
+                document.getElementById("yesGif").style.display = "none";
+                document.getElementById("noGif").style.display = "none";
+                document.getElementById("moreLoveGif").style.display = "none";
+                document.getElementById("question").style.display = "block";
+                document.getElementById("question").style.opacity = "1";
+            }, 500); // Wait for fade-out to complete
+        }
+    </script>
+
+</body>
+</html>
